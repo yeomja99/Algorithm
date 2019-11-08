@@ -2,34 +2,38 @@
 #include <vector>
 using namespace std;
 
-vector<int>node[1001];
-bool check[1001];
+bool visit[1001];
+vector <int> edge[1001];
 
-void dfs(int a) {
-	check[a] = true;
-	for (int i = 0; i < node[a].size(); i++) {
-		if (check[node[a][i]] == false) {
-			dfs(node[a][i]);
-		}
+int dfs(int v) {
+	visit[v] = true;
+
+	for (int i = 0; i < edge[v].size(); i++) {
+		if (visit[edge[v][i]] == false)
+			dfs(edge[v][i]);
 	}
+
+	return 1;
 }
 int main(void) {
-	int n; int m;
+	int n, m;
 	scanf("%d %d", &n, &m);
 
 	for (int i = 0; i < m; i++) {
-		int u; int v;
-		scanf("%d %d", &u, &v);
-		node[u].push_back(v);
-		node[v].push_back(u);
+		int a, b;
+		scanf("%d %d", &a, &b);
+		edge[a].push_back(b);
+		edge[b].push_back(a);
 	}
 	int count = 0;
 	for (int i = 1; i <= n; i++) {
-		if (check[i] == false) {
-			dfs(i);
-			count++;
-		}
+		if (visit[i] == false)
+			count += dfs(i);
+
 	}
+
 	printf("%d", count);
+
 	return 0;
+
 }
